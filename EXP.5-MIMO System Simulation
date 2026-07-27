@@ -1,0 +1,133 @@
+clc; 
+clear; 
+close all;
+ MIMO BER Simulation
+SNR_dB = 0:2:20;
+SNR = 10.^(SNR_dB/10);
+Nt = 2; 
+Nr = 2;
+BER = zeros(1,length(SNR));
+
+for i = 1:length(SNR)
+
+    bits = randi([0 1],10000,1);
+    symbols = 2*bits-1;
+
+    H = (randn(Nr,Nt)+1j*randn(Nr,Nt))/sqrt(2);
+
+    noise = (randn(Nr,10000)+1j*randn(Nr,10000))...
+        /sqrt(2*SNR(i));
+
+    tx = H(1,1)*symbols' + noise(1,:);
+
+    rx = real(tx)>0;
+
+    BER(i)=sum(rx'~=bits)/length(bits);
+
+end
+
+Reliability1 = 1-BER;
+ MIMO Reliability Model
+
+Reliability2=zeros(1,length(SNR));
+
+for i=1:length(SNR)
+
+    H=(randn(Nr,Nt)+1j*randn(Nr,Nt))/sqrt(2);
+
+    Reliability2(i)=1-exp(-SNR(i)/10);
+
+end
+
+noise_power = 1./SNR;
+
+ OFDMA Throughput 
+
+rb_bw = 180e3;
+
+users = 1:5;
+
+alloc_RB = [10 12 8 15 5];
+
+mod_eff = [2 4 6 4 2];
+
+throughput=(alloc_RB.*rb_bw.*mod_eff)/1e6;
+
+ FIGURE 
+
+figure('Position',[100 100 1000 900])
+
+
+Row 1 : MIMO BER 
+subplot(3,2,1)
+
+semilogy(SNR_dB,BER,'-o','LineWidth',2)
+
+title('MIMO BER Performance vs SNR')
+
+xlabel('SNR (dB)')
+ylabel('BER')
+
+grid on
+subplot(3,2,2)
+
+plot(SNR_dB,Reliability1,'-s','LineWidth',2)
+
+title('MIMO Reliability (1-BER)')
+
+xlabel('SNR (dB)')
+ylabel('Reliability')
+
+grid on
+
+Row 2 : MIMO Reliability Model
+
+subplot(3,2,3)
+
+plot(SNR_dB,Reliability2,'-o','LineWidth',2)
+
+title('MIMO Reliability vs SNR')
+
+xlabel('SNR (dB)')
+ylabel('Reliability (0-1)')
+
+grid on
+
+subplot(3,2,4)
+
+plot(SNR_dB,noise_power,'-s','LineWidth',2)
+
+title('Noise Power Variation with SNR')
+
+xlabel('SNR (dB)')
+ylabel('Noise Power')
+
+grid on
+
+ Row 3 : OFDMA Throughput
+subplot(3,2,5)
+
+plot(users,throughput,'-o','LineWidth',2)
+
+title('OFDMA User Throughput')
+
+xlabel('User Index')
+
+ylabel('Throughput (Mbps)')
+
+grid on
+
+subplot(3,2,6)
+
+plot(alloc_RB,throughput,'-s','LineWidth',2)
+
+title('Resource Blocks vs Throughput')
+
+xlabel('Allocated Resource Blocks')
+
+ylabel('Throughput (Mbps)')
+
+grid on
+
+
+sgtitle('MIMO Performance and OFDMA Throughput Analysis')
