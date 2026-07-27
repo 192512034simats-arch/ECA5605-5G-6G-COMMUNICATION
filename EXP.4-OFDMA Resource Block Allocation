@@ -1,0 +1,82 @@
+clc; clear; close all;
+
+%% System 1: Equal RB Allocation
+bandwidth = 10e6;
+rb_size = 180e3;
+total_RB = floor(bandwidth/rb_size);
+
+users1 = 1:6;
+base = floor(total_RB/length(users1));
+
+alloc1 = base*ones(1,length(users1));
+alloc1(1:mod(total_RB,length(users1))) = ...
+    alloc1(1:mod(total_RB,length(users1)))+1;
+
+util1 = (alloc1/total_RB)*100;
+
+%% System 2: Fixed RB Allocation
+total_RB2 = 50;
+users2 = 1:5;
+alloc2 = [12 10 9 8 11];
+
+util2 = (alloc2/total_RB2)*100;
+
+%% System 3: Throughput Calculation
+rb_bw = 180e3;
+users3 = 1:5;
+
+alloc_RB = [12 10 9 8 11];
+mod_eff = [2 4 6 4 2];
+
+throughput = (alloc_RB .* rb_bw .* mod_eff)/1e6;
+
+%% 3x2 Figure Layout
+
+figure('Position',[100 100 900 900])
+
+% -------- Row 1: System 1 --------
+subplot(3,2,1)
+stem(users1,alloc1,'filled','LineWidth',2)
+title('OFDMA RB Allocation (Equal Distribution)')
+xlabel('User Index')
+ylabel('RB Count')
+grid on
+
+subplot(3,2,2)
+plot(users1,util1,'-o','LineWidth',2)
+title('RB Utilization (%)')
+xlabel('User Index')
+ylabel('Utilization (%)')
+grid on
+
+% -------- Row 2: System 2 --------
+subplot(3,2,3)
+plot(users2,alloc2,'-o','LineWidth',2)
+title('OFDMA RB Allocation (Fixed Scenario)')
+xlabel('User Index')
+ylabel('RB Count')
+grid on
+
+subplot(3,2,4)
+plot(users2,util2,'-s','LineWidth',2)
+title('RB Utilization (%)')
+xlabel('User Index')
+ylabel('Utilization (%)')
+grid on
+
+% -------- Row 3: System 3 --------
+subplot(3,2,5)
+plot(users3,throughput,'-o','LineWidth',2)
+title('OFDMA User Throughput')
+xlabel('User Index')
+ylabel('Throughput (Mbps)')
+grid on
+
+subplot(3,2,6)
+plot(alloc_RB,throughput,'-s','LineWidth',2)
+title('RB vs Throughput Relationship')
+xlabel('Allocated RBs')
+ylabel('Throughput (Mbps)')
+grid on
+
+sgtitle('OFDMA Resource Allocation, Utilization and Throughput Analysis')
