@@ -1,0 +1,67 @@
+clc;
+clear;
+close all;
+%% GSM TDMA Parameters
+frameTime = 4.615;      % ms
+totalSlots = 8;
+allocatedSlots = 6;
+freeSlots = totalSlots - allocatedSlots;
+slotDuration = frameTime/totalSlots;
+utilization = (allocatedSlots/totalSlots)*100;
+time = linspace(0,frameTime,totalSlots);
+slotPresence = ones(1,totalSlots);
+users = 1:totalSlots;
+allocation = [ones(1,allocatedSlots) zeros(1,freeSlots)];
+fprintf('\n===== GSM TDMA RESULTS =====\n');
+fprintf('Frame Time = %.3f ms\n',frameTime);
+fprintf('Slot Duration = %.4f ms\n',slotDuration);
+fprintf('Allocated Slots = %d\n',allocatedSlots);
+fprintf('Free Slots = %d\n',freeSlots);
+fprintf('Frame Utilization = %.2f %%\n',utilization);
+
+figure('Color','w','Position',[100 100 1200 700]);
+
+Image 1 
+subplot(2,3,1)
+stem(time,slotPresence,'filled','LineWidth',2)
+title('TDMA Time Slot Structure')
+xlabel('Time (ms)')
+ylabel('Slot Level')
+ylim([0 1.2])
+grid on
+
+Image 2 
+subplot(2,3,2)
+plot(time,slotPresence,'-o','LineWidth',2,'MarkerSize',8)
+title('Continuous View of Slot Allocation')
+xlabel('Time (ms)')
+ylabel('Slot Presence')
+ylim([0 2])
+grid on
+
+ Image 3 
+subplot(2,3,3)
+plot([1 2],[allocatedSlots freeSlots],'-o','LineWidth',2,'MarkerSize',10)
+xticks([1 2])
+xticklabels({'Allocated','Free'})
+ylabel('Number of Slots')
+title('GSM Frame Utilization')
+grid on
+
+ Image 4 
+subplot(2,3,4)
+pie([allocatedSlots freeSlots],{'Allocated','Free'})
+colormap([0 0 1;1 1 0])
+title('Slot Distribution in GSM Frame')
+
+Image 5 
+subplot(2,3,5)
+stem(users,allocation,'filled','LineWidth',2)
+title('TDMA Slot Allocation per User')
+xlabel('User Index')
+ylabel('Slot Status')
+ylim([-0.2 1.2])
+grid on
+
+sgtitle(sprintf('GSM TDMA Analysis\nSlot Duration = %.4f ms   Utilization = %.2f%%', ...
+    slotDuration,utilization));
