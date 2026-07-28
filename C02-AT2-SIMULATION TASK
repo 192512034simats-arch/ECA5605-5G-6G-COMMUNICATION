@@ -1,0 +1,46 @@
+clc;
+clear;
+close all;
+
+%% Parameters
+task_size = 1:10:100;      % MB
+bandwidth = 20;            % Mbps
+latency = 30;              % ms
+local_speed = 25;          % MB/s
+cloud_speed = 100;         % MB/s
+output_ratio = 0.1;
+
+%% Delay Calculation
+local_delay = task_size / local_speed;
+
+upload = (task_size * 8) / bandwidth;
+download = (task_size * output_ratio * 8) / bandwidth;
+processing = task_size / cloud_speed;
+
+cloud_delay = upload + download + processing + (2 * latency / 1000);
+
+%% Create Table
+Result = table(task_size', local_delay', cloud_delay', ...
+    'VariableNames', {'TaskSize_MB','LocalDelay_s','CloudDelay_s'});
+
+%% Display Table and Graph Side by Side
+figure('Position',[100 100 1000 450]);
+
+% Left Side - Table
+uitable('Data',table2cell(Result), ...
+    'ColumnName',Result.Properties.VariableNames, ...
+    'Units','Normalized', ...
+    'Position',[0.02 0.1 0.42 0.8]);
+
+% Right Side - Graph
+axes('Position',[0.52 0.15 0.45 0.75]);
+
+plot(task_size, local_delay,'-ob','LineWidth',2);
+hold on;
+plot(task_size, cloud_delay,'-sr','LineWidth',2);
+
+xlabel('Task Size (MB)');
+ylabel('Delay (Seconds)');
+title('Local vs Cloud Processing Delay');
+legend('Local Delay','Cloud Delay','Location','northwest');
+grid on;
