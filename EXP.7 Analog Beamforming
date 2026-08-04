@@ -1,0 +1,41 @@
+clc;
+clear;
+close all;
+% 1. BEAMFORMING GAIN
+
+antennas = [2 4 8 16 32];
+gain = 10*log10(antennas);
+
+figure(1);
+bar(antennas, gain);
+grid on;
+
+xlabel('Number of Antenna Elements');
+ylabel('Beamforming Gain (dB)');
+title('Beamforming Gain for Different Antenna Array Sizes');
+
+% 2. BEAM WIDTH
+
+
+beamwidth = [90 45 22.5 11.25 5.625];
+
+figure(2);
+plot(antennas, beamwidth, 'o-', 'LineWidth', 2);
+grid on;
+
+xlabel('Number of Antenna Elements');
+ylabel('Beam Width (Degrees)');
+title('Beam Width for Different Antenna Array Sizes');
+
+
+% 3. MAIN LOBE DIRECTION IN ANALOG BEAMFORMING
+
+
+theta = [-60 -30 0 30 60];
+normalized_gain = [1 1 1 1 1];
+
+figure(3);
+polarplot(deg2rad(theta), normalized_gain, ...
+    'o-', 'LineWidth', 2);
+
+title('Main Lobe Direction in Analog Beamforming');
