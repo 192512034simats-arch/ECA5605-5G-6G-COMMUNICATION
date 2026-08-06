@@ -1,0 +1,62 @@
+clc;
+clear;
+close all;
+
+% Number of patients
+N = 100;
+
+% Generate Sensor Data
+Temperature = 36 + rand(1,N)*3;      % 36-39 °C
+HeartRate = 60 + rand(1,N)*60;       % 60-120 bpm
+SpO2 = 90 + rand(1,N)*10;            % 90-100 %
+
+% Wireless Transmission Delay (5G)
+delay = rand(1,N)*5;                 % 0-5 ms
+
+% AI Diagnosis
+Diagnosis = zeros(1,N);
+
+for i=1:N
+    if (Temperature(i)>37.5 || HeartRate(i)>100 || SpO2(i)<95)
+        Diagnosis(i)=1;   % Patient Needs Attention
+    else
+        Diagnosis(i)=0;   % Normal
+    end
+end
+
+% Display Results
+disp('Patient   Temp   HR   SpO2   Delay(ms)   Diagnosis');
+
+for i=1:10
+    if Diagnosis(i)==1
+        status='Abnormal';
+    else
+        status='Normal';
+    end
+
+    fprintf('%3d\t%5.2f\t%5.1f\t%5.1f\t%5.2f\t%s\n', ...
+        i,Temperature(i),HeartRate(i),SpO2(i),delay(i),status);
+end
+
+% Graph 1
+figure;
+plot(Temperature,'r','LineWidth',2);
+hold on;
+plot(HeartRate/3,'b','LineWidth',2);
+plot(SpO2,'g','LineWidth',2);
+grid on;
+xlabel('Patient Number');
+ylabel('Sensor Values');
+title('Wireless Healthcare Sensor Data');
+legend('Temperature','Heart Rate/3','SpO2');
+
+% Graph 2
+figure;
+bar(Diagnosis);
+xlabel('Patient Number');
+ylabel('Diagnosis');
+title('AI Diagnosis Result');
+ylim([0 1.5]);
+set(gca,'YTick',[0 1]);
+set(gca,'YTickLabel',{'Normal','Abnormal'});
+grid on;
