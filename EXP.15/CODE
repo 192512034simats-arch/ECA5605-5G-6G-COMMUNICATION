@@ -1,0 +1,83 @@
+OBJECTIVE 1
+clc;
+clear;
+close all;
+% Time samples
+t = 1:10;
+% Prediction Accuracy (%)
+Accuracy = [90 91 92 93 94 95 96 97 98 99];
+% Actual Network Traffic (Mbps)
+Traffic = [45 50 55 60 65 70 75 80 85 90];
+figure
+% -------- Graph 1 --------
+subplot(2,1,1)
+plot(t,Accuracy,'-o','LineWidth',2)
+title('AI Prediction Accuracy over Time')
+xlabel('Time Interval')
+ylabel('Prediction Accuracy (%)')
+grid on
+% -------- Graph 2 --------
+subplot(2,1,2)
+bar(Traffic)
+title('Network Traffic Samples Used for AI Prediction')
+xlabel('Traffic Sample')
+ylabel('Traffic (Mbps)')
+grid on
+
+OBJECTIVE 2
+clc;
+clear;
+close all;
+% Time intervals
+t = 1:10;
+% Actual and Predicted Traffic (Mbps)
+Actual = [50 55 60 62 68 70 75 80 85 90];
+Predicted = [49 54 61 63 67 71 74 81 84 89];
+% Squared Error
+SqError = (Actual - Predicted).^2;
+% Mean Squared Error
+MSE = mean(SqError);
+disp(['Mean Squared Error (MSE) = ', num2str(MSE)])
+figure
+% -------- Graph 1 --------
+subplot(2,1,1)
+plot(t,SqError,'-o','LineWidth',2)
+title('Squared Error of AI Traffic Prediction')
+xlabel('Time Interval')
+ylabel('Squared Error')
+grid on
+% -------- Graph 2 --------
+subplot(2,1,2)
+bar([MSE])
+title('Mean Squared Error (MSE)')
+xlabel('AI Prediction Model')
+ylabel('MSE')
+grid on
+
+OBJECTIVE 3
+clc;
+clear;
+close all;
+% Time intervals
+t = 1:10;
+% Network Throughput (Mbps)
+Throughput = [120 135 150 165 180 195 210 225 240 255];
+% Network Utilization (%)
+Utilization = [60 65 70 74 78 82 86 90 94 98];
+figure
+% -------- Graph 1 --------
+subplot(2,1,1)
+plot(t,Throughput,'-o','LineWidth',2)
+title('AI-Based Network Throughput')
+xlabel('Time Interval')
+ylabel('Throughput (Mbps)')
+grid on
+% -------- Graph 2 --------
+subplot(2,1,2)
+plot(Throughput,Utilization,'-s','LineWidth',2)
+title('Throughput vs Network Utilization')
+xlabel('Network Throughput (Mbps)')
+ylabel('Network Utilization (%)')
+grid on
+disp('Time Throughput(Mbps) Utilization(%)')
+disp([t' Throughput' Utilization'])
