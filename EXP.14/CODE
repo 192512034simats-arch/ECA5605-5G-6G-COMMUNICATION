@@ -1,0 +1,86 @@
+OBJECTIVE 1
+clc;
+clear;
+close all;
+% SNR values (dB)
+SNR = 0:5:30;
+% Maximum Throughput (Mbps)
+Max_TP = 100;
+% Throughput calculation
+Throughput = Max_TP*(1-exp(-SNR/10));
+disp('SNR(dB) Throughput(Mbps)')
+disp([SNR' Throughput'])
+figure
+% -------- Graph 1 --------
+subplot(2,1,1)
+plot(SNR,Throughput,'-o','LineWidth',2)
+title('5G Throughput vs SNR')
+xlabel('Signal-to-Noise Ratio (dB)')
+ylabel('Throughput (Mbps)')
+grid on
+% -------- Graph 2 --------
+subplot(2,1,2)
+bar(Throughput)
+title('Throughput at Different SNR Levels')
+xlabel('SNR Index')
+ylabel('Throughput (Mbps)')
+grid on
+
+OBJECTIVE 2
+clc;
+clear;
+close all;
+% SNR values (dB)
+SNR = 0:5:30;
+% Simulated Bit Error Rate (BER)
+BER = [0.30 0.18 0.10 0.05 0.02 0.008 0.001];
+% Reliability (%)
+Reliability = (1-BER)*100;
+disp('SNR(dB) BER Reliability(%)')
+disp([SNR' BER' Reliability'])
+figure
+% -------- Graph 1 --------
+subplot(2,1,1)
+semilogy(SNR,BER,'-o','LineWidth',2)
+title('SNR vs Bit Error Rate in 5G')
+xlabel('Signal-to-Noise Ratio (dB)')
+ylabel('Bit Error Rate (BER)')
+grid on
+% -------- Graph 2 --------
+subplot(2,1,2)
+plot(SNR,Reliability,'-s','LineWidth',2)
+title('SNR vs Communication Reliability')
+xlabel('Signal-to-Noise Ratio (dB)')
+ylabel('Reliability (%)')
+grid on
+
+OBJECTIVE 3
+clc;
+clear;
+close all;
+% Modulation schemes
+Modulation = {'QPSK','16-QAM','64-QAM','256-QAM'};
+% Required SNR (dB)
+SNR = [5 10 18 25];
+% Spectral Efficiency (bits/s/Hz)
+Efficiency = [2 4 6 8];
+disp('Required SNR (dB) and Spectral Efficiency')
+disp(table(Modulation',SNR',Efficiency', ...
+    'VariableNames',{'Modulation','SNR_dB','Efficiency'}))
+figure
+% -------- Graph 1 --------
+subplot(2,1,2)
+plot(SNR,Efficiency,'-o','LineWidth',2)
+title('SNR vs Spectral Efficiency')
+xlabel('Signal-to-Noise Ratio (dB)')
+ylabel('Spectral Efficiency (bits/s/Hz)')
+grid on
+% -------- Graph 2 --------
+subplot(2,1,1)
+plot(1:4,SNR,'-s','LineWidth',2)
+xticks(1:4)
+xticklabels(Modulation)
+title('Required SNR for Different Modulation Schemes')
+xlabel('Modulation Scheme')
+ylabel('Required SNR (dB)')
+grid on
